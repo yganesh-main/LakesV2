@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat with Leaflet Map</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'styles.css' %}">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Prompts</h2>
+    <ul id="prompt-list">
+      <!-- JavaScript will populate this -->
+    </ul>
+    <button id="new-prompt">+ New Prompt</button>
+  </div>
+
+  <div class="main">
+    <div class="top-bar">
+      <div>Hello, {{ request.user.username }}</div>
+      <form method="post" action="/logout/">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+      </form>
+    </div>
+
+    <div class="scrollable-content">
+      <div id="chat-messages" class="chat-messages"></div>
+      <div id="chat-media" class="chat-media"></div>
+      <div id="chat-map" class="chat-map"></div>
+    </div>
+
+    <form id="chat-form" class="chat-form" enctype="multipart/form-data">
+      <div class="input-group">
+        <input type="file" id="image" name="image" class="file-input" multiple>
+        <input type="text" id="message" name="message" placeholder="Type your message..." class="text-input" required>
+        <input type="hidden" id="prompt_id" name="prompt_id">
+        <button type="submit" class="send-btn">Send</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="{% static 'script.js' %}"></script>
+</body>
+</html>
