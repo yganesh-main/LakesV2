@@ -48,7 +48,7 @@ def handle_prompt(request):
                 headers={'Content-Type': 'application/json'}
             )
             response_data = response.json()
-            print(response_data.get("response", ""))
+            #print(response_data.get("response", ""))
         except Exception as e:
             return JsonResponse({'error': 'Error communicating with Lambda: {}'.format(str(e))})
         return JsonResponse(response_data)
@@ -145,9 +145,6 @@ def handle_prompt(request):
         """
 
         for ic in aggregated_invalid_coordinates:
-            print(ic)
-            print(ic.get("latitude", ""))
-            print(ic.get("longitude", ""))
             if isinstance(ic, dict):
                 lat_val = ic.get("lat") if ic.get("lat") is not None else ic.get('input', {}).get("latitude", "")
                 lon_val = ic.get("lon") if ic.get("lon") is not None else ic.get('input', {}).get("longitude", "")
@@ -162,7 +159,7 @@ def handle_prompt(request):
             )
         table_html += "</table>"
         combined_response_text += "Invalid coordinates:" + table_html
-    print(combined_response_text)
+    #print(combined_response_text)
 
     return JsonResponse({
         "response": combined_response_text,
