@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -14,7 +14,13 @@
 <body>
   <div class="main-container">
     <aside class="sidebar">
-      <div class="sidebar-header">HMDA</div>
+      <div class="sidebar-header">
+        HMDA
+
+        <button id="theme-toggle" aria-label="Toggle color theme">
+            🌙
+        </button>
+      </div>
       <ul id="prompt-list"></ul>
       <button id="new-prompt">+ New Prompt</button>
     </aside>
@@ -33,9 +39,30 @@
       </form>
     </div>
   </div>
+<div id="chat-log"></div>
+    <script>
+        const form = document.getElementById('chat-form');
+        const chatLog = document.getElementById('chat-log');
+        form.addEventListener("submit", function(e) {
+            e.preventDefault();
 
+            const formData = new FormData(form);
+
+            fetch("/handle_prompt/", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle response...
+                chatLog.innerHTML += `<p>Bot: ${data.response}</p>`;
+            });
+        });
+    </script>
   <!-- Leaflet JS (for maps) -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="/static/script.js"></script>
+
+
 </body>
 </html>
