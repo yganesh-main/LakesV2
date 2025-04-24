@@ -1,227 +1,238 @@
-/* Basic Reset & Body */
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #343541;
-  color: white;
-  height: 100vh;
-  overflow: hidden;
+/* =========================================================
+   THEME TOKENS
+   =========================================================*/
+
+/* -----  default (dark) theme  ----- */
+:root{
+  --bg-body:      #343541;
+  --bg-side:      #202123;
+  --bg-chat:      #40414f;
+  --bg-user:      #4f5660;
+  --bg-bot:       #2c2d3a;
+  --bg-input:     #2c2d3a;
+  --bg-prompt:    #2c2d3a;
+  --txt-main:     #ffffff;
+  --accent:       #10a37f;
 }
 
-/* Main Layout */
-.main-container {
-  display: flex;
-  height: 100vh;
+/* -----  light-mode overrides  ----- */
+body.light-mode{
+  --bg-body:      #eff0f1;
+  --bg-side:      #f4f4f4;
+  --bg-chat:      #ffffff;
+  --bg-user:      #e3e4e6;
+  --bg-bot:       #d9dbdd;
+  --bg-input:     #e9eaec;
+  --bg-prompt:    #e1e2e4;
+  --txt-main:     #121212;
+  --accent:       #00856c;
 }
 
-.sidebar {
-  width: 20%;
-  background-color: #202123;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+/* =========================================================
+   GLOBAL RESET & BASE
+   =========================================================*/
+*{box-sizing:border-box;}
+
+body{
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  background:var(--bg-body);
+  color:var(--txt-main);
+  height:100vh;
+  overflow:hidden;
 }
 
-.sidebar-header {
-  font-weight: bold;
-  font-size: 1.2rem;
+/* =========================================================
+   MAIN LAYOUT
+   =========================================================*/
+.main-container{display:flex;height:100vh;}
+
+.sidebar{
+  width:20%;
+  background:var(--bg-side);
+  padding:1rem;
+  display:flex;
+  flex-direction:column;
+  gap:1rem;
 }
 
-.chat-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  background-color: #40414f;
-  padding: 1rem;
+.sidebar-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-weight:bold;
+  font-size:1.2rem;
 }
 
-/* Chat Box and Lines */
-.chat-box {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  overflow-y: auto;
+.chat-container{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  background:var(--bg-chat);
+  padding:1rem;
 }
 
-.chat-line {
-  display: flex;
-  width: 100%;
-  margin: 0.5rem 0;
+/* =========================================================
+   CHAT BOX & LINES
+   =========================================================*/
+.chat-box{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:.5rem;
+  overflow-y:auto;
 }
 
-.chat-line.bot {
-  justify-content: flex-start;
+.chat-line{display:flex;width:100%;margin:.5rem 0;}
+.chat-line.bot{justify-content:flex-start;}
+.chat-line.user{justify-content:flex-end;}
+
+/* =========================================================
+   CHAT BUBBLES
+   =========================================================*/
+.chat-bubble{
+  display:inline-block;
+  padding:.6rem 1rem;
+  border-radius:8px;
+  line-height:1.4;
+  max-width:70%;
+  word-break:break-word;
+}
+.chat-bubble.bot{background:var(--bg-bot);}
+.chat-bubble.user{background:var(--bg-user);}
+.chat-bubble.user.transparent{background:none;box-shadow:none;}
+
+/* =========================================================
+   TYPING INDICATOR
+   =========================================================*/
+.chat-message.typing{
+  background:none;
+  padding:0;
 }
 
-.chat-line.user {
-  justify-content: flex-end;
+#typed{            /* #typed lives inside .typing message */
+  font-size:1rem;
+  background:var(--bg-bot);
+  display:inline-block;
+  padding:.6rem 1rem;
+  border-radius:8px;
+  max-width:70%;
+  word-break:break-word;
 }
 
-/* Chat Bubbles */
-.chat-bubble {
-  display: inline-block;
-  padding: 0.6rem 1rem;
-  border-radius: 8px;
-  line-height: 1.4;
-  max-width: 70%;
-  word-break: break-word;
+/* =========================================================
+   USER IMAGE
+   =========================================================*/
+.user-image-container{
+  width:150px;height:100px;
+  position:relative;overflow:hidden;
+  cursor:pointer;
+  transition:all .3s ease;
+}
+.user-image-container.expanded{width:100%;height:auto;}
+.user-image-wrapper img{width:100%;height:100%;object-fit:cover;border:none;}
+
+/* =========================================================
+   MAP CONTAINER
+   =========================================================*/
+.chat-map-container{
+  width:300px;height:200px;
+  border:1px solid #ddd;
+  border-radius:12px;
+  overflow:hidden;
+  position:relative;
+  margin-top:10px;
+  transition:all .3s ease;
+}
+.chat-map-container.expanded{width:95%;height:500px;}
+
+.map-maximize-btn{
+  position:absolute;
+  top:5px;right:5px;
+  background:none;border:none;padding:0;
+  cursor:pointer;z-index:1000;
+  min-width:20px;min-height:20px;
+}
+.map-maximize-btn img{width:24px;height:24px;background:white;}
+
+/* =========================================================
+   BUTTONS
+   =========================================================*/
+.send-btn,
+.show-map-btn,
+.download-csv-btn{
+  background:var(--accent);
+  color:#fff;
+}
+.show-map-btn,
+.download-csv-btn{
+  font-size:18px;
+  padding:8px 16px;
+  border:none;border-radius:6px;
+  cursor:pointer;
 }
 
-.chat-bubble.bot {
-  background-color: #2c2d3a;
+#theme-toggle{
+  font-size:1rem;
+  background:none;border:none;
+  cursor:pointer;
+  color:var(--txt-main);
+  transition:transform .2s;
+}
+#theme-toggle:hover{transform:scale(1.1);}
+
+/* =========================================================
+   ERROR BUBBLE
+   =========================================================*/
+.chat-message.error{
+  background:#ff4c4c;
+  text-align:center;
+  padding:10px;
+  margin:10px auto;
+  max-width:60%;
+  border-radius:8px;
 }
 
-.chat-bubble.user {
-  background-color: #4f5660;
+/* =========================================================
+   INPUT AREA
+   =========================================================*/
+.input-group{
+  display:flex;align-items:center;
+  padding:1rem;
+  border-top:1px solid #333;
 }
 
-/* Remove extra background for image messages */
-.chat-bubble.user.transparent {
-  background: none;
-  box-shadow: none;
+.text-input,
+.file-input{
+  background:var(--bg-input);
+  color:var(--txt-main);
+  border:none;outline:none;
+  border-radius:6px;
+  padding:.6rem;
+}
+.text-input{flex:1;margin-left:.5rem;}
+.file-input{color:var(--txt-main);}
+
+.file-input::-webkit-file-upload-button,
+.file-input::file-selector-button{
+  background:var(--accent);
+  color:#fff;border:none;border-radius:4px;
+  padding:.4rem .7rem;
+  cursor:pointer;
 }
 
-/* User Image Container */
-.user-image-container {
-  width: 150px;
-  height: 100px;
-  position: relative;
-  overflow: hidden;
-  background-color: transparent;
-  cursor: pointer;
-  transition: all 0.3s ease;
+/* =========================================================
+   SIDEBAR PROMPT LIST
+   =========================================================*/
+#prompt-list{
+  list-style:none;padding:0;
+  flex-grow:1;overflow-y:auto;
 }
 
-/* Expanded state for user images */
-.user-image-container.expanded {
-  width: 100%;
-  height: auto;
+#prompt-list li{
+  padding:8px;margin:5px 0;
+  background:var(--bg-prompt);
+  color:var(--txt-main);
+  border-radius:5px;
+  cursor:pointer;
 }
-
-/* Image Wrapper */
-.user-image-wrapper img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border: none;
-}
-
-/* Map Container */
-.chat-map-container {
-  width: 300px;
-  height: 200px;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  overflow: hidden;
-  position: relative;
-  margin-top: 10px;
-  transition: all 0.3s ease;
-}
-
-/* Map Maximize/Minimize Button positioned at top right with map icon */
-.map-maximize-btn {
-  position: absolute;
-  top: 20px;       /* position in the top right corner */
-  right: 20px;
-  background: none;  /* remove background */
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  z-index: 1000;
-  /* Set a minimum clickable area */
-  min-width: 20px;
-  min-height: 20px;
-}
-
-.map-maximize-btn img {
-  width: 20px;   /* image dimensions */
-  height: 20px;
-  background: none;
-}
-
-/* Show/Hide Map Button */
-.show-map-btn {
-  font-size: 18px;
-  padding: 8px 16px;
-  cursor: pointer;
-  border: none;
-  border-radius: 6px;
-  background-color: #10a37f;
-  color: white;
-}
-
-/* Error Message Styling */
-.chat-message.error {
-  background-color: #ff4c4c;
-  text-align: center;
-  padding: 10px;
-  margin: 10px auto;
-  max-width: 60%;
-  border-radius: 8px;
-}
-
-/* Input Area Styling */
-.input-group {
-  display: flex;
-  align-items: center;
-  padding: 1rem;
-  border-top: 1px solid #333;
-}
-
-.text-input {
-  flex: 1;
-  padding: 0.6rem;
-  margin-left: 0.5rem;
-  border-radius: 6px;
-  border: none;
-  outline: none;
-  background-color: #2c2d3a;
-  color: white;
-}
-
-.file-input {
-  color: white;
-}
-
-.send-btn {
-  margin-left: 0.5rem;
-  padding: 0.6rem 1rem;
-  border: none;
-  border-radius: 6px;
-  background-color: #10a37f;
-  color: white;
-  cursor: pointer;
-}
-
-/* Sidebar Prompt List */
-#prompt-list {
-  list-style: none;
-  padding: 0;
-  flex-grow: 1;
-  overflow-y: auto;
-}
-
-#prompt-list li {
-  padding: 8px;
-  margin: 5px 0;
-  background-color: #2c2d3a;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-/* Typing GIF */
-.typing-gif {
-    font-size: 1.5rem;
-    color: var(--accent-color);
-    font-weight: 600;
-}
-
-
-#typed {
-    font-size: 1.5rem;
-    color: var(--accent-color);
-    font-weight: 600;
-}
-
