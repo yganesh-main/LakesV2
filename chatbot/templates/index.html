@@ -1,11 +1,10 @@
-
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>HMDA</title>
   {% load static %}
-<link rel="stylesheet" href="{% static 'styles.css' %}" />
+  <link rel="stylesheet" href="{% static 'styles.css' %}" />
   <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
 
   <!-- Leaflet CSS (for maps) -->
@@ -14,16 +13,54 @@
 <body>
   <div class="main-container">
     <aside class="sidebar">
-      <div class="sidebar-header">
-        HMDA
+      {% comment %} <div class="sidebar-header">
+        <b>HMDA BOT</b>
+        <a>
+            <span class="user-icon">👤</span>
+            <span class="username">{{ request.user.username }}</span>
+            <button id="theme-toggle" aria-label="Toggle color theme">
+              🌙
+          </button>
+        </a>
+              </div> {% endcomment %}
 
-        <button id="theme-toggle" aria-label="Toggle color theme">
-            🌙
-        </button>
+      <div class="sidebar-header">
+        <div class="title">HMDA BOT</div>
+      
+        <div class="account-section">
+          <div class="user-info">
+            <span class="user-icon">👤</span>
+            <button id="theme-toggle" aria-label="Toggle color theme">🌙</button>
+
+
+            <br>
+            <span class="username">{{ request.user.username }}</span>
+          </div>
+        </div>
       </div>
+      
+      
       <ul id="prompt-list"></ul>
-      <button id="new-prompt">+ New Prompt</button>
+        <button id="new-prompt">+ New Prompt</button> 
+        {% comment %} <a href="{% url 'logout' %}" id="logout-btn" class="logout-link">Logout</a> {% endcomment %}
+        <a href="{% url 'logout' %}">
+          <button id="logout-btn">Logout</button>
+        </a>
+        
+       
     </aside>
+
+
+    
+
+  {% comment %} <div class="main">
+    <div class="top-bar">
+            <div class="right-side">
+        <span class="user-icon">👤</span>
+        <span class="username">Hello, {{ request.user.username }}</span>
+      </div>
+    </div>
+  </div>  {% endcomment %}
 
     <div class="chat-container">
       <!-- Single container for all chat items -->
@@ -37,32 +74,54 @@
           <button type="submit" class="send-btn">Send</button>
         </div>
       </form>
+
+      <!-- Scroll to Top Button -->
+      <button id="scroll-top-btn" class="scroll-btn">↑</button>
     </div>
   </div>
-<div id="chat-log"></div>
-    <script>
-        const form = document.getElementById('chat-form');
-        const chatLog = document.getElementById('chat-log');
-        form.addEventListener("submit", function(e) {
-            e.preventDefault();
 
-            const formData = new FormData(form);
 
-            fetch("/handle_prompt/", {
-                method: "POST",
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Handle response...
-                chatLog.innerHTML += `<p>Bot: ${data.response}</p>`;
-            });
-        });
-    </script>
+
+  <div id="chat-log"></div>
+  <script>
+    const form = document.getElementById('chat-form');
+    const chatLog = document.getElementById('chat-log');
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+
+      fetch("/handle_prompt/", {
+        method: "POST",
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Handle response...
+        chatLog.innerHTML += `<p>Bot: ${data.response}</p>`;
+      });
+    });
+
+    // Scroll to Top Button Functionality
+    const scrollTopBtn = document.getElementById('scroll-top-btn');
+    scrollTopBtn.addEventListener("click", function() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    // Show/hide scroll top button based on scroll position
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 200) {
+        scrollTopBtn.style.display = 'block';
+      } else {
+        scrollTopBtn.style.display = 'none';
+      }
+    });
+  </script>
+
   <!-- Leaflet JS (for maps) -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="/static/script.js"></script>
 
-
 </body>
 </html>
+

@@ -159,6 +159,7 @@ body{
    BUTTONS
    =========================================================*/
 .send-btn,
+.logout-btn,
 .show-map-btn,
 .download-csv-btn{
   background:var(--accent);
@@ -171,6 +172,23 @@ body{
   border:none;border-radius:6px;
   cursor:pointer;
 }
+
+#logout-btn {
+  font-size: 30px !important;
+  padding: 20px 40px !important;  /* Increased padding for larger button */
+  background-color: #f44336 !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  transition: background-color 0.3s ease, transform 0.2s ease !important;
+}
+
+#logout-btn:hover {
+  background-color: #d32f2f;
+  transform: scale(1.1);  /* Enlarge on hover */
+}
+
 
 #theme-toggle{
   font-size:1rem;
@@ -236,3 +254,44 @@ body{
   border-radius:5px;
   cursor:pointer;
 }
+
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background: var(--bg-side); /* match your sidebar background */
+  color: var(--txt-main);
+  position: relative;
+  z-index: 100;
+}
+
+.left-side {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.right-side {
+  margin-left: auto;
+  font-size: 1rem;.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: var(--bg-side);
+  color: var(--txt-main);
+  border-bottom: 1px solid #444;
+}
+
+.left-side {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.right-side {
+  font-size: 1rem;
+}
+
+}
+

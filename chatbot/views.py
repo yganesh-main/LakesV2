@@ -2,11 +2,21 @@ import uuid
 import json
 import base64
 import requests
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
+from django.urls import reverse
 from django.core.files.storage import default_storage
 from concurrent.futures import ThreadPoolExecutor
+from django.http import HttpResponse
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.contrib.auth import logout as auth_logout
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
+
+
 
 # Replace with your deployed Lambda URL
 LAMBDA_API_URL = 'https://wkwg5ojnse54vm2ylk6agt3ovq0jswdp.lambda-url.us-east-1.on.aws/'
@@ -21,11 +31,14 @@ def convert_to_float(value):
 
 
 @csrf_exempt
+@login_required(login_url='/login/')
+
 def index(request):
     return render(request, 'index.html')
 
 
 @csrf_exempt
+@login_required
 def handle_prompt(request):
     if request.method != 'POST':
         return JsonResponse({'error': 'Only POST method allowed'}, status=405)
@@ -190,3 +203,69 @@ def handle_prompt(request):
         "coordinates": aggregated_valid_coordinates,
         "image_urls": aggregated_image_urls
     })
+
+
+
+# # Login view
+@csrf_exempt
+# def login_view(request):
+#     # if request.user.is_authenticated:
+#     #     return redirect('index')  # Already logged in
+
+#     if request.method == 'POST':
+#         username = request.POST.get('username')
+#         password = request.POST.get('password')
+#         user = authenticate(request, username=username, password=password)
+
+#         if user is not None:
+#             login(request, user)
+#             return redirect('index')
+#         else:
+#             return render(request, 'chatbot/login.html', {'error': 'Invalid credentials'})
+
+#     return render(request, 'chatbot/login.html')
+
+
+def login_view(request):
+    # print("DEBUG: login_view called") 
+    if request.user.is_authenticated:
+        return redirect('index')  # Already logged in 
+    
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        print(f"DEBUG: Attempting login for {username}")  
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('index')
+        else:
+            return render(request, 'chatbot/login.html', {'error': 'Invalid credentials'})
+    return render(request, 'chatbot/login.html')
+
+
+# Logout view
+@csrf_exempt
+def logout_view(request):
+    auth_logout(request)
+    return HttpResponse('<h3>You have been logged out. Redirecting to login...</h3><script>setTimeout(function(){ window.location.href = "/login/"; }, 2000);</script>')
+
+
+
+
+# Registration view
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            # Automatically login after registration
+            login(request, user)
+            messages.success(request, f"Welcome {user.username}!")
+            return redirect('index')  # Redirect to home or dashboard
+        else:
+            messages.error(request, "Please fix the errors below.")
+    else:
+        form = UserCreationForm()
+
+    return render(request, 'chatbot/register.html', {'form': form})
